@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Padoru.Sensors
 {
 	public interface ISensor
 	{
-		event Action<GameObject[]> OnDetection;
+		event Action<List<GameObject>> OnDetection;
 	}
 }

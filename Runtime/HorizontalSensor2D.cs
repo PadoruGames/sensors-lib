@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Padoru.Sensors
@@ -11,8 +12,9 @@ namespace Padoru.Sensors
 
 		private float lastDetectionTime;
 		private Collider2D[] colliders = new Collider2D[100];
+		private List<GameObject> results = new List<GameObject>();
 
-		public event Action<GameObject[]> OnDetection;
+		public event Action<List<GameObject>> OnDetection;
 
 		private void Awake()
 		{
@@ -33,10 +35,10 @@ namespace Padoru.Sensors
 		{
 			var count = Physics2D.OverlapBoxNonAlloc(transform.position, boxSize, 0, colliders, detectLayers);
 
-			var results = new GameObject[count];
+			results.Clear();
 			for (int i = 0; i < count; i++)
 			{
-				results[i] = colliders[i].gameObject;
+				results.Add(colliders[i].gameObject);
 			}
 
 			OnDetection?.Invoke(results);
