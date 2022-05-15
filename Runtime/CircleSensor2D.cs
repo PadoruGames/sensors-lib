@@ -5,9 +5,9 @@ using Padoru.Core.Utils;
 
 namespace Padoru.Sensors
 {
-	public class HorizontalSensor2D : MonoBehaviour, ISensor
+	public class CircleSensor2D : MonoBehaviour, ISensor
 	{
-		[SerializeField] private Vector2 boxSize = new Vector2(2, 2);
+		[SerializeField] private float radius = 2;
 		[SerializeField] private float detectionInterval = 1f;
 		[SerializeField] private LayerMask detectLayers;
 
@@ -25,7 +25,7 @@ namespace Padoru.Sensors
 
 		private void Detect(float deltaTime)
 		{
-			var count = Physics2D.OverlapBoxNonAlloc(transform.position, boxSize, 0, colliders, detectLayers);
+			var count = Physics2D.OverlapCircleNonAlloc(transform.position, radius, colliders, detectLayers);
 
 			results.Clear();
 			for (int i = 0; i < count; i++)
@@ -38,17 +38,8 @@ namespace Padoru.Sensors
 
 		private void OnDrawGizmosSelected()
 		{
-			var center = transform.position;
-			var pointA = new Vector2(center.x - boxSize.x / 2f, center.y - boxSize.y / 2f);
-			var pointB = new Vector2(center.x - boxSize.x / 2f, center.y + boxSize.y / 2f);
-			var pointC = new Vector2(center.x + boxSize.x / 2f, center.y + boxSize.y / 2f);
-			var pointD = new Vector2(center.x + boxSize.x / 2f, center.y - boxSize.y / 2f);
-
 			Gizmos.color = Color.yellow;
-			Gizmos.DrawLine(pointA, pointB);
-			Gizmos.DrawLine(pointB, pointC);
-			Gizmos.DrawLine(pointC, pointD);
-			Gizmos.DrawLine(pointD, pointA);
+			Gizmos.DrawWireSphere(transform.position, radius);
 		}
 	}
 }
