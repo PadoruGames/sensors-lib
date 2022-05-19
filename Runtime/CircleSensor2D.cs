@@ -23,6 +23,11 @@ namespace Padoru.Sensors
 			timer.Start();
 		}
 
+		private void OnDestroy()
+		{
+			timer.Stop();
+		}
+
 		private void Detect(float deltaTime)
 		{
 			var count = Physics2D.OverlapCircleNonAlloc(transform.position, radius, colliders, detectLayers);
