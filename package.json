@@ -1,6 +1,6 @@
 {
   "name": "com.padoru.sensors-lib",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "displayName": "Padoru Sensors",
   "description": "A library to handle sensors in Unity games",
   "unity": "2020.3"
