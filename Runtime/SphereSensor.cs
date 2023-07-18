@@ -12,6 +12,7 @@ namespace Padoru.Sensors
 		[SerializeField] private float radius = 2;
 		[SerializeField] private float detectionInterval = 1f;
 		[SerializeField] private LayerMask detectLayers;
+		[SerializeField] private bool autoDetect = true;
 
 		private Collider[] colliders = new Collider[100];
 		private List<GameObject> results = new ();
@@ -21,16 +22,22 @@ namespace Padoru.Sensors
 
 		private void Awake()
 		{
-			timer = new Timer(detectionInterval, Detect);
-			timer.Start();
+			if (autoDetect)
+			{
+				timer = new Timer(detectionInterval, _ => AutoDetect());
+				timer.Start();
+			}
 		}
 
 		private void OnDestroy()
 		{
-			timer.Stop();
+			if (timer != null)
+			{
+				timer.Stop();
+			}
 		}
 
-		private void Detect(float deltaTime)
+		public List<GameObject> Detect()
 		{
 			var count = Physics.OverlapSphereNonAlloc(transform.position, radius, colliders, detectLayers);
 
@@ -40,6 +47,13 @@ namespace Padoru.Sensors
 				results.Add(colliders[i].gameObject);
 			}
 
+			return results;
+		}
+
+		private void AutoDetect()
+		{
+			Detect();
+			
 			OnDetection?.Invoke(results);
 		}
 
