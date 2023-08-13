@@ -1,18 +1,20 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Padoru.Core.Utils;
+using UnityEngine;
+
+using Debug = Padoru.Diagnostics.Debug;
 
 namespace Padoru.Sensors
 {
-	public class HorizontalSensor2D : MonoBehaviour, ISensor
+	public class SphereSensor : MonoBehaviour, ISensor
 	{
-		[SerializeField] private Vector2 boxSize = new Vector2(2, 2);
+		[SerializeField] private float radius = 2;
 		[SerializeField] private float detectionInterval = 1f;
 		[SerializeField] private LayerMask detectLayers;
 		[SerializeField] private bool autoDetect = true;
 
-		private Collider2D[] colliders = new Collider2D[100];
+		private Collider[] colliders = new Collider[100];
 		private List<GameObject> results = new ();
 		private Timer timer;
 
@@ -37,7 +39,7 @@ namespace Padoru.Sensors
 
 		public List<GameObject> Detect()
 		{
-			var count = Physics2D.OverlapBoxNonAlloc(transform.position, boxSize, 0, colliders, detectLayers);
+			var count = Physics.OverlapSphereNonAlloc(transform.position, radius, colliders, detectLayers);
 
 			results.Clear();
 			for (int i = 0; i < count; i++)
@@ -57,17 +59,8 @@ namespace Padoru.Sensors
 
 		private void OnDrawGizmosSelected()
 		{
-			var center = transform.position;
-			var pointA = new Vector2(center.x - boxSize.x / 2f, center.y - boxSize.y / 2f);
-			var pointB = new Vector2(center.x - boxSize.x / 2f, center.y + boxSize.y / 2f);
-			var pointC = new Vector2(center.x + boxSize.x / 2f, center.y + boxSize.y / 2f);
-			var pointD = new Vector2(center.x + boxSize.x / 2f, center.y - boxSize.y / 2f);
-
 			Gizmos.color = Color.yellow;
-			Gizmos.DrawLine(pointA, pointB);
-			Gizmos.DrawLine(pointB, pointC);
-			Gizmos.DrawLine(pointC, pointD);
-			Gizmos.DrawLine(pointD, pointA);
+			Gizmos.DrawWireSphere(transform.position, radius);
 		}
 	}
 }
